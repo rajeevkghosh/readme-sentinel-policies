@@ -1,4 +1,4 @@
-	# network_gcp_region_restricition.sentinel
+# Readme File for "network_gcp_region_restricition.sentinel"
 
 ## Description
 
@@ -31,7 +31,7 @@ for resourceTypesRegionMap as rt, _ {
 The code which will iterate over all the resource type "google_pubsub_topic/google_bigquery_dataset/google_dataproc_cluster/google_secret_manager_secret/google_dialogflow_cx_agent" and check whether the resource is associated with US region only or not. 
 If the resource is belonging to US then the policy will be passed, otherwise it will return violations.
 
-## The code:
+## The code :
 
 ```
 msgs = {}
@@ -49,6 +49,10 @@ for allResources as address, rc {
 ```
 
 ## The check_for_location Function
+This code will first check if the location is string or not. If this is string, it will convert it to array. otherwise code will call another function called "get_list_element" to fetch the location from the list or map.
+incase the returned value from "get_list_element" function is a map, the  check_for_location function will further iterate it over and get the locations from the map.
+
+Once we have all the location elements fetched from above two functions, it will call another function called "check_for_matches" which will perform the validation as whether the location retrieved are defined in "prefix" or "multi_region_var variables. if there's some violations, the main function will return false.
 
 ```
 check_for_location = func(address, rc, location_key_param, location_key) {
