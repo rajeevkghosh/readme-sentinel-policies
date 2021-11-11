@@ -38,7 +38,7 @@ for resourceTypesIamMap as rt, _ {
 
  # Working of  GCP_IAM_ENTITY Component
 
-### The code which will iterate over all the resource type "google_project_iam_policy/google_project_iam_binding/google_project_iam_member/google_organization_iam_policy/google_organization_iam_binding/google_organization_iam_member" and check whether the iam member is part of "Group" or "Service Accounts". If any "User" account is found, it will return violations.
+The code which will iterate over all the resource type "google_project_iam_policy/google_project_iam_binding/google_project_iam_member/google_organization_iam_policy/google_organization_iam_binding/google_organization_iam_member" and check whether the iam member is part of "Group" or "Service Accounts". If any "User" account is found, it will return violations.
 
 ## The code :
 
@@ -110,7 +110,7 @@ check_for_member = func(address, rc, mkey) {
 ---------
 
 # Working of GCP_IAM_CUSTOM Component
-### The code will iterate over all the resources and check if the mock file contains any resource type mentioned in { deny_services = ["google_project_iam_custom_role", "google_organization_iam_custom_role"] } variable.
+The code will iterate over all the resources and check if the mock file contains any resource type mentioned in { deny_services = ["google_project_iam_custom_role", "google_organization_iam_custom_role"] } variable.
 ### If any resource type mentioned in "deny_services" list is found, the code will return violations.
 
 ## The Code:
