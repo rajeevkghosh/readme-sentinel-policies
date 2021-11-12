@@ -79,7 +79,7 @@ resourceTypesRegionMap = {
 ## How to Add another "Resource Type" in Above Map?
 The code is made flexible enough to accomodate another resource types for which we need to restrict the locations.
 As per our requirements, we can add more resources in the  "resourceTypesRegionMap" as shown in below example.
-- In this example , we have shown how a new example resource called "google_example_resource" can be added in the ""resourceTypesRegionMap" map:
+- In this example , we have shown how a new example resource called "google_example_resource" can be added in the "resourceTypesRegionMap" map:
 ```
 resourceTypesRegionMap = {
 	"google_pubsub_topic": {
