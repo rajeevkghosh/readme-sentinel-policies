@@ -101,6 +101,7 @@ resourceTypesRegionMap = {
     "google_example_resource": {
 		"key": "location",
 	},
+}
 ```
 
 ## The check_for_location Function
