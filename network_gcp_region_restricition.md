@@ -76,6 +76,32 @@ resourceTypesRegionMap = {
 	},
 }
 ```
+## How to Add another "Resource Type" in Above Map?
+The code is made flexible enough to accomodate another resource types for which we need to restrict the locations.
+As per our requirements, we can add more resources in the  "resourceTypesRegionMap" as shown in below example.
+- In this example , we have shown how a new example resource called "google_example_resource" can be added in the ""resourceTypesRegionMap" map:
+```
+resourceTypesRegionMap = {
+	"google_pubsub_topic": {
+		"key": "message_storage_policy.0.allowed_persistence_regions",
+	},
+	"google_bigquery_dataset": {
+		"key": "location",
+	},
+	"google_dataproc_cluster": {
+		"key": "region",
+	},
+	"google_secret_manager_secret": {
+		"key":          "replication.0.user_managed.0.replicas",
+		"location_key": "location",
+	},
+    "google_dialogflow_cx_agent": {
+		"key": "location",
+	},
+    "google_example_resource": {
+		"key": "location",
+	},
+```
 
 ## The check_for_location Function
 This code will first check if the location is string or not. If this is string, it will convert it to array. otherwise code will call another function called "get_list_element" to fetch the location from the list or map.
