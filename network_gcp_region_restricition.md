@@ -48,6 +48,35 @@ for allResources as address, rc {
 }
 ```
 
+## The resourceTypesRegionMap
+This map contains all the topics that we need to enforce policy on. example - "google_pubsub_topic", "google_bigquery_dataset" etc.
+
+Now since for each topic the location key can be diffrent, hence we have used "key" parameter here and the values can be either "location" or the specific values where the location is specified in the mock( for example for "google_topic_pubsub", the value would be ""message_storage_policy.0.allowed_persistence_regions").
+
+For "google_secret_manager_secret", since there can be multiple occurances of secret manager keys and locations, we have introduced "location_key" parameter to retrieve location for each occurance of keys.
+
+
+```
+resourceTypesRegionMap = {
+	"google_pubsub_topic": {
+		"key": "message_storage_policy.0.allowed_persistence_regions",
+	},
+	"google_bigquery_dataset": {
+		"key": "location",
+	},
+	"google_dataproc_cluster": {
+		"key": "region",
+	},
+	"google_secret_manager_secret": {
+		"key":          "replication.0.user_managed.0.replicas",
+		"location_key": "location",
+	},
+	"google_dialogflow_cx_agent": {
+		"key": "location",
+	},
+}
+```
+
 ## The check_for_location Function
 This code will first check if the location is string or not. If this is string, it will convert it to array. otherwise code will call another function called "get_list_element" to fetch the location from the list or map.
 incase the returned value from "get_list_element" function is a map, the  check_for_location function will further iterate it over and get the locations from the map.
