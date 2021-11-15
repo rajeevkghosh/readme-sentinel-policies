@@ -74,6 +74,9 @@ resourceTypesRegionMap = {
 	"google_dialogflow_cx_agent": {
 		"key": "location",
 	},
+	 "google_compute_interconnect_attachment": {
+		"key": "region",
+	},
 }
 ```
 ## How to Add another "Resource Type" in Above Map?
@@ -97,6 +100,9 @@ resourceTypesRegionMap = {
 	},
     "google_dialogflow_cx_agent": {
 		"key": "location",
+	},
+	 "google_compute_interconnect_attachment": {
+		"key": "region",
 	},
     "google_example_resource": {
 		"key": "location",
