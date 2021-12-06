@@ -3,7 +3,7 @@
 ## Description
 
 
-The policy checks that resources(eg. PubSub/BigQuery/Dataproc/SecretManager/DialogFlow) need to be created in US region only.
+The policy checks that resources(eg. PubSub/BigQuery/Dataproc/SecretManager/DialogFlow) need to be created in regions as per the regions allowed for that resource type.
 
 
 -------
@@ -28,8 +28,16 @@ for resourceTypesRegionMap as rt, _ {
 
 ## Working Code to Enforce policy
 
-The code which will iterate over all the resource type "google_pubsub_topic/google_bigquery_dataset/google_dataproc_cluster/google_secret_manager_secret/google_dialogflow_cx_agent" and check whether the resource is associated with US region only or not. 
-If the resource is belonging to US then the policy will be passed, otherwise it will return violations.
+The code which will iterate over all the resource type "google_pubsub_topic/google_bigquery_dataset/google_dataproc_cluster/google_secret_manager_secret/google_dialogflow_cx_agent/google_compute_interconnect_attachment/google_spanner_instance/google_sql_database_instance/google_kms_key_ring" and check whether the resource is associated with specified US location only (As per the "allowed region" for the resource) or not. 
+If the resource is belonging to "allowed region" then the policy will be passed, otherwise it will return violations.
+
+Note: "allowed region" is a generic term we have used for the following variables which contains the list of allowed regions for specific "resource type".
+- prefix
+- spanner_region
+- cloudsql_allowed_region
+- multi_region_var
+- global_var
+
 
 ## The code :
 
@@ -74,8 +82,17 @@ resourceTypesRegionMap = {
 	"google_dialogflow_cx_agent": {
 		"key": "location",
 	},
-	 "google_compute_interconnect_attachment": {
+	"google_compute_interconnect_attachment": {
 		"key": "region",
+	},
+	"google_spanner_instance": {
+		"key": "config",
+	},
+	"google_sql_database_instance": {
+		"key": "region",
+	},
+	"google_kms_key_ring": {
+		"key": "location",
 	},
 }
 ```
@@ -98,13 +115,19 @@ resourceTypesRegionMap = {
 		"key":          "replication.0.user_managed.0.replicas",
 		"location_key": "location",
 	},
-    "google_dialogflow_cx_agent": {
+	"google_dialogflow_cx_agent": {
 		"key": "location",
 	},
-	 "google_compute_interconnect_attachment": {
+	"google_compute_interconnect_attachment": {
 		"key": "region",
 	},
-    "google_example_resource": {
+	"google_spanner_instance": {
+		"key": "config",
+	},
+	"google_sql_database_instance": {
+		"key": "region",
+	},
+	"google_kms_key_ring": {
 		"key": "location",
 	},
 }
@@ -147,6 +170,78 @@ check_for_location = func(address, rc, location_key_param, location_key) {
 
 
 ```
+## The check_for_matches Function
+This function will be called from inside the function: "check_for location". The purpose of this function is to check if the locations mentioned in the terraform code for particular resource type is in the "allowed region" accordingly or not for that particular resource.
+
+As mentioned earlier, from "allowed region" we mean locations defined in the following variables :
+- prefix
+- spanner_region
+- cloudsql_allowed_region
+- multi_region_var
+- global_var
+
+
+```
+# Function to check region prefix OR location prefix Or allowed region according to "resource type"
+check_for_matches = func(location, address, rc) {
+	violations = {}
+	for location as lk {
+		is_spanner = rule { rc["type"] == "google_spanner_instance" }
+		is_dialogflow = rule { rc["type"] == "google_dialogflow_cx_agent" }
+		is_cloudsqlInstance = rule { rc["type"] == "google_sql_database_instance" }
+		is_kmsKeyring = rule { rc["type"] == "google_kms_key_ring" }
+
+		if is_spanner {
+
+			lk_arr = strings.split(lk, "/")
+			lk = lk_arr[-1]
+
+			if not (lk in spanner_region) {
+				violations[address] = rc
+				print("The location for " + address + " should be in: " + plan.to_string(spanner_region) + "only")
+			}
+
+		} else {
+
+			resource_prefix = strings.split(lk, "-")[0] + "-"
+			#print(resource_prefix)
+
+			if is_dialogflow {
+
+				if not (resource_prefix in prefix or lk in global_var) {
+					violations[address] = rc
+					print("The location for " + address + " should be in " + plan.to_string(prefix) + " or " + plan.to_string(global_var) + " region only ")
+
+				}
+			} else if is_cloudsqlInstance {
+				if not (resource_prefix in prefix or lk in cloudsql_allowed_region) {
+					violations[address] = rc
+					print("The location for " + address + " should be in " + plan.to_string(prefix) + " or " + plan.to_string(cloudsql_allowed_region) + " region only ")
+
+				}
+			} else if is_kmsKeyring {
+				if not (resource_prefix in prefix) {
+					violations[address] = rc
+					print("The location for " + address + " should be in " + plan.to_string(prefix) + " region only ")
+
+				}
+
+			} else {
+
+				if not (resource_prefix in prefix or lk in multi_region_var) {
+					violations[address] = rc
+					print("The location for " + address + " should be in " + plan.to_string(prefix) + " or " + plan.to_string(multi_region_var) + " region only")
+				}
+			}
+		}
+
+	}
+	return violations
+}
+
+```
+
+
 ## The Main Function
 This function returns "False" if length of violations is not 0.
 
