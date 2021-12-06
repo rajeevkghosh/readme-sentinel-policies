@@ -3,8 +3,14 @@
 ## Description
 
 
-The policy checks that resources(eg. PubSub/BigQuery/Dataproc/SecretManager/DialogFlow) need to be created in regions as per the regions allowed for that resource type.
+The policy checks that resources(eg. PubSub/BigQuery/Dataproc/SecretManager/DialogFlow) get deployed to the locations only according to "allowed region" list.
 
+Note: "allowed region" is a generic term we have used for the following variables which contains the list of allowed regions for specific "resource type".
+- prefix
+- spanner_region
+- cloudsql_allowed_region
+- multi_region_var
+- global_var
 
 -------
 
@@ -30,13 +36,6 @@ for resourceTypesRegionMap as rt, _ {
 
 The code which will iterate over all the resource type "google_pubsub_topic/google_bigquery_dataset/google_dataproc_cluster/google_secret_manager_secret/google_dialogflow_cx_agent/google_compute_interconnect_attachment/google_spanner_instance/google_sql_database_instance/google_kms_key_ring" and check whether the resource is associated with specified US location only (As per the "allowed region" for the resource) or not. 
 If the resource is belonging to "allowed region" then the policy will be passed, otherwise it will return violations.
-
-Note: "allowed region" is a generic term we have used for the following variables which contains the list of allowed regions for specific "resource type".
-- prefix
-- spanner_region
-- cloudsql_allowed_region
-- multi_region_var
-- global_var
 
 
 ## The code :
