@@ -5,7 +5,7 @@
 
 The policy checks that resources(eg. PubSub/BigQuery/Dataproc/SecretManager/DialogFlow) get deployed to the locations only according to "allowed region" list.
 
-Note: "allowed region" is a generic term we have used for the following variables which contains the list of allowed regions for specific "resource type".
+<b>Note:</b> "allowed region" is a generic term we have used for the following variables which contains the list of allowed regions for specific "resource type".
 - prefix
 - spanner_region
 - cloudsql_allowed_region
