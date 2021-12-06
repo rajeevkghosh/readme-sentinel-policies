@@ -249,5 +249,7 @@ This function returns "False" if length of violations is not 0.
 
 ```
 GCP_RES_LOCATION = rule { length(msgs) is 0 }
+# Main rule
+main = rule { GCP_RES_LOCATION }
 
 ```
