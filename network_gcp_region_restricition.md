@@ -129,6 +129,9 @@ resourceTypesRegionMap = {
 	"google_kms_key_ring": {
 		"key": "location",
 	},
+	"google_example_resource": {
+		"key": "location",
+	},
 }
 ```
 
