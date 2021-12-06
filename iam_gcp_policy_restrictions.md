@@ -96,15 +96,16 @@ check_for_member = func(address, rc, mkey) {
 
 	}
 	for members_list as lst {
-		print(lst)
-		if not (strings.has_prefix(lst, allowed_prefix[0]) or strings.has_prefix(lst, allowed_prefix[1])) {
-			violations[address] = rc
-		}
+		member_prefix = strings.split(lst,":")[0]+":"
+
+		#print(member_prefix)
+			if not(member_prefix in allowed_prefix) {
+				violations[address] = rc
+			}
 	}
 
 	return violations
 }
-
 ```
 ---------
 ---------
