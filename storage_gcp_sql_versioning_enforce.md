@@ -48,6 +48,8 @@ GCP_CLOUDSQL_VERSION = rule { length(violations) is 0 }
 This function returns "False" if length of violations is not 0.
 
 ```
+GCP_CLOUDSQL_VERSION = rule { length(violations) is 0 }
+## The Main Function
 main = rule {GCP_CLOUDSQL_VERSION}
 
 ```
