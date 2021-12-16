@@ -41,8 +41,6 @@ violations_masterauth = {}
 for allGkeInstances as address, rc {
 
 	master_auth = plan.evaluate_attribute(rc.change.after, "master_authorized_networks_config")
-	#print(master_auth[0]["cidr_blocks"])
-	#cidr_undefined = master_auth
 
 	isnull_master_auth = rule { length(master_auth) == 0 or master_auth[0]["cidr_blocks"] == null }
 
