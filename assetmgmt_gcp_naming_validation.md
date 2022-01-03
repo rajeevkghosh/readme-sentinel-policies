@@ -2,9 +2,9 @@
 
 ## Description
 
-The policy enforces the use of follwoing Resource Naming [org]-[country]-[env]-*-[appid]-[uid] only.
+The policy enforces the use of following Resource Naming [org]-[country]-[env]-*-[appid]-[uid] only.
 
-One exception is "google_bigquery_dataset" for which Naming should be like this : [org]\_[country]\_[env]\_*\_[appid]\_[uid].
+One exception is "google_bigquery_dataset" for which Naming should be like this : [org]\_[country]\_[env]\_*\_[appid]\_[uid]. This is due to BigQuery resources does not allow ‘-’ in the name. ‘_’ should be used instead. 
 
 <b>The policy also validates the constraints as mentioned below:</b>
 
@@ -41,7 +41,7 @@ for resourceTypesNameMap as rt, _ {
 
 ## Working Code to Enforce policy
 
-The code which will iterate over all the resource types mentioned in "resourceTypesNameMap" :eg. "google_pubsub_topic/google_dataproc_cluster/google_secret_manager_secret/google_dialogflow_cx_agent/google_compute_interconnect_attachment/google_spanner_instance/google_sql_database_instance/google_kms_key_ring" and check whether the resource naming is in the following format: [org]-[country]-[env]-*-[appid]-[uid] or not and also if the naming is according to follwoing constrraints:
+The code which will iterate over all the resource types mentioned in "resourceTypesNameMap" :eg. "google_pubsub_topic/google_dataproc_cluster/google_secret_manager_secret/google_dialogflow_cx_agent/google_compute_interconnect_attachment/google_spanner_instance/google_sql_database_instance/google_kms_key_ring" and check whether the resource naming is in the following format: [org]-[country]-[env]-*-[appid]-[uid] or not and also if the naming is according to following constraints:
 
 |Section | Size | Allowed Values | Description |
 |--------|------|----------------|:-----------:|
@@ -96,7 +96,7 @@ for allResources as address, rc {
 ## The resourceTypesNameMap
 This map contains all the resources that we need to enforce policy on. example - "google_pubsub_topic", "google_bigquery_dataset" etc.
 
-Now since for each resources the name of the naming attribute can be diffrent, hence we have used "name_param" parameter here and the values can be according to naming attribute mentioned in terraform registry document for that resource.
+Now since for each resources the "name" field of the naming attribute can be diffrent, hence we have used "name_param" parameter here, and, the values should be according to naming attribute mentioned in terraform registry document for that resource.
 
 We have used another parameter to uniquely identify the resource called, "name_substring" and its values would be between 2-3 characters.
 
@@ -427,7 +427,7 @@ resourceTypesNameMap = {
 
 ## The check_org Function
 This function will be called from within "check_resource_prefix" function.
-This function checks if the "org" defined in the name of the resource is among the valid names mentioned in the org param field.
+This function checks if the "org" defined in the name of the resource is among the valid names mentioned in the "org" param field.
 ```
 check_org = func(org, name) {
 	if org contains name {
@@ -439,7 +439,7 @@ check_org = func(org, name) {
 ```
 ## The check_country Function
 This function will be called from within "check_resource_prefix" function.
-This function checks if the "country" defined in the name of the resource is among the valid names mentioned in the country param field.
+This function checks if the "country" defined in the name of the resource is among the valid names mentioned in the "country" param field.
 ```
 check_country = func(country, name) {
 	if country contains name {
@@ -451,7 +451,7 @@ check_country = func(country, name) {
 ```
 ## The check_environment Function
 This function will be called from within "check_resource_prefix" function.
-This function checks if the "environment" defined in the name of the resource is among the valid names mentioned in the environment param field.
+This function checks if the "environment" defined in the name of the resource is among the valid names mentioned in the "environment" param field.
 ```
 check_environment = func(environment, name) {
 	if environment contains name {
@@ -489,7 +489,7 @@ check_uid = func(name) {
 ## The check_resource_prefix Function
 This code will first split the name of the resource based on the split character defined in the calling function. The split character will be either "-" or "\_".
 
-Then we will assign the values retrieved to the variables as below:
+Then the values retrieved have been passed on to the variables as below:
 - org = resource_name_arr[0]
 - country = resource_name_arr[1]
 - environment = resource_name_arr[2]
@@ -497,14 +497,14 @@ Then we will assign the values retrieved to the variables as below:
 - application_id = resource_name_arr[4]
 - uid = resource_name_arr[5]
 
-Then further we will call below functions to check constraints. These functions are:
+Then further it calls below functions to check constraints. These functions are:
 - check_org
 - check_country
 - check_environment
 - check_application_id
 - check_uid
 
-If every critera is met, the policy will pass otherwise it will return violations.
+If every critera is met, the policy will "pass" otherwise it will return "violations".
 
 ```
 check_resource_prefix = func(name, resource_name_substring, org_param, country_param, environment_param, split_char) {
