@@ -425,6 +425,67 @@ resourceTypesNameMap = {
 
 ```
 
+## The check_org Function
+This function will be called from within "check_resource_prefix" function.
+This function checks if the "org" defined in the name of the resource is among the valid names mentioned in the org param field.
+```
+check_org = func(org, name) {
+	if org contains name {
+		return true
+	} else {
+		return false
+	}
+}
+```
+## The check_country Function
+This function will be called from within "check_resource_prefix" function.
+This function checks if the "country" defined in the name of the resource is among the valid names mentioned in the country param field.
+```
+check_country = func(country, name) {
+	if country contains name {
+		return true
+	} else {
+		return false
+	}
+}
+```
+## The check_environment Function
+This function will be called from within "check_resource_prefix" function.
+This function checks if the "environment" defined in the name of the resource is among the valid names mentioned in the environment param field.
+```
+check_environment = func(environment, name) {
+	if environment contains name {
+		return true
+	} else {
+		return false
+	}
+}
+```
+## The check_application_id Function
+This function will be called from within "check_resource_prefix" function.
+This function checks if the application_id defined in the name is between 4 and 6 characters .
+```
+check_application_id = func(name) {
+	if length(name) >= 4 and length(name) <= 6 {
+		return true
+	} else {
+		return false
+	}
+}
+```
+## The check_uid Function
+This function will be called from within "check_resource_prefix" function.
+This function checks if the "uid" defined in the name is between 2 and 10 characters .
+```
+check_uid = func(name) {
+	if length(name) >= 2 and length(name) <= 10 {
+		return true
+	} else {
+		return false
+	}
+}
+```
+
 ## The check_resource_prefix Function
 This code will first split the name of the resource based on the split character defined in the calling function. The split character will be either "-" or "\_".
 
@@ -437,13 +498,11 @@ Then we will assign the values retrieved to the variables as below:
 - uid = resource_name_arr[5]
 
 Then further we will call below functions to check constraints. These functions are:
-- check_scope
 - check_org
 - check_country
 - check_environment
 - check_application_id
 - check_uid
-- check_system
 
 If every critera is met, the policy will pass otherwise it will return violations.
 
