@@ -2,7 +2,7 @@
 
 ## Description
 
-The policy enforces the use of following Resource Naming [org]-[country]-[env]-*-[appid]-[uid] only.
+The policy enforces the use of following Resource Naming convention only: [org]-[country]-[env]-*-[appid]-[uid]
 
 One exception is "google_bigquery_dataset" for which Naming should be like this : [org]\_[country]\_[env]\_*\_[appid]\_[uid]. This is due to BigQuery resources does not allow ‘-’ in the name. ‘_’ should be used instead. 
 
