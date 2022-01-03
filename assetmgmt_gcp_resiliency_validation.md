@@ -4,7 +4,7 @@
 ## Description
 
 This sentinel policy enforces usage of health check in load balancer.
-The policy will check if the resource: "google_compute_region_backend_service" has "health_checks" attribute defined in the terraform code. If there is no "health_checks" attribute defined, the policy will return violations
+The policy will check if the resource: "google_compute_region_backend_service" has "health_checks" attribute defined in the terraform code. If there is no "health_checks" attribute defined, or if the "health_checks" attribute is having empty list, the policy will return violations.
 
 ## Import common-functions/tfplan-functions/tfplan-functions.sentinel with alias "plan"
 ```
